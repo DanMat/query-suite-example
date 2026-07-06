@@ -8,6 +8,8 @@ A small, runnable example that wires together the **`@danmat` HTTP QUERY suite**
 > 🌐 **Live playground:** **<https://query-suite-example.danmat.workers.dev>**
 > Open DevTools → Network on that page to watch a real `QUERY` request fly.
 
+[![The @danmat QUERY suite playground](docs/playground.png)](https://query-suite-example.danmat.workers.dev)
+
 It exercises all four packages end-to-end:
 
 | Package | Role in the demo |
