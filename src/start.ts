@@ -11,7 +11,9 @@ serve({ fetch: app.fetch, port }, (info) => {
   // use the POST + X-HTTP-Method-Override fallback that @danmat/query-server
   // accepts transparently. (In-process / edge runtimes can use QUERY directly —
   // see `npm run demo`.)
-  console.log("Try (POST + method override — the path that works on Node today):");
+  console.log(
+    "Try (POST + method override — the path that works on Node today):",
+  );
   console.log(
     `  curl ${base}/stocks/search \\\n` +
       `    -H 'content-type: application/json' \\\n` +

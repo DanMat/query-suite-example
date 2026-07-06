@@ -1,5 +1,5 @@
-import { app } from "./server.js";
 import { PLAYGROUND_HTML } from "./playground.js";
+import { app } from "./server.js";
 
 // Serve the interactive playground at the root. It's same-origin with the API,
 // and CORS is configured in server.ts for cross-origin callers too.

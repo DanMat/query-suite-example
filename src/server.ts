@@ -1,11 +1,11 @@
-import { Hono } from "hono";
-import { cors } from "hono/cors";
 import {
   checkQueryRequest,
   readQueryJson,
   withAcceptQuery,
 } from "@danmat/query-server";
-import { searchStocks, type StockFilter } from "./data.js";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { type StockFilter, searchStocks } from "./data.js";
 
 /** Query-body formats this API understands. */
 const ACCEPTED = ["application/json"];
@@ -58,5 +58,9 @@ app.on("QUERY", "/legacy/stocks/search", (c) =>
 app.post("/legacy/stocks/search", async (c) => {
   const filter = await readQueryJson<StockFilter>(c.req.raw);
   const results = searchStocks(filter);
-  return Response.json({ count: results.length, results, servedVia: "POST-fallback" });
+  return Response.json({
+    count: results.length,
+    results,
+    servedVia: "POST-fallback",
+  });
 });
