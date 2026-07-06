@@ -1,0 +1,41 @@
+name: Deploy
+
+# Deploys the Worker to Cloudflare on every push to main — but only once the
+# secrets exist, so it stays green (skipped) until you opt in.
+# Add two repo secrets to enable:
+#   CLOUDFLARE_API_TOKEN   — a token with the "Edit Cloudflare Workers" template
+#   CLOUDFLARE_ACCOUNT_ID  — your Cloudflare account id
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for Cloudflare credentials
+        id: guard
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -n "$TOKEN" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No CLOUDFLARE_API_TOKEN secret set — skipping deploy."
+          fi
+      - uses: actions/checkout@v7
+        if: steps.guard.outputs.ready == 'true'
+      - uses: actions/setup-node@v6
+        if: steps.guard.outputs.ready == 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+        if: steps.guard.outputs.ready == 'true'
+      - uses: cloudflare/wrangler-action@v3
+        if: steps.guard.outputs.ready == 'true'
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

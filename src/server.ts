@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import {
   checkQueryRequest,
   readQueryJson,
@@ -10,6 +11,18 @@ import { searchStocks, type StockFilter } from "./data.js";
 const ACCEPTED = ["application/json"];
 
 export const app = new Hono();
+
+// QUERY isn't a CORS-safelisted method, so a cross-origin call triggers a
+// preflight (RFC 10008 §CORS). Allow QUERY (and the POST-override fallback) so
+// the API is usable from any origin, including the hosted playground.
+app.use(
+  "*",
+  cors({
+    origin: "*",
+    allowMethods: ["QUERY", "POST", "OPTIONS"],
+    allowHeaders: ["content-type", "x-http-method-override"],
+  }),
+);
 
 /**
  * A modern screener endpoint that speaks QUERY natively — and, thanks to

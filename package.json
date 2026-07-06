@@ -7,6 +7,8 @@
   "scripts": {
     "demo": "tsx src/demo.ts",
     "start": "tsx src/start.ts",
+    "dev:worker": "wrangler dev",
+    "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit"
   },
   "author": "Dan Matthew <dannymatthew@gmail.com>",
@@ -22,6 +24,7 @@
   "devDependencies": {
     "@types/node": "^20.11.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "wrangler": "^3.114.17"
   }
 }
