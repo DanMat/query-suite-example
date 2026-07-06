@@ -5,7 +5,7 @@
 
 A small, runnable example that wires together the **`@danmat` HTTP QUERY suite** ([RFC 10008](https://www.rfc-editor.org/rfc/rfc10008)) into one story: a **stock screener** whose filter is too rich for a URL, so it travels in the request body — exactly what the QUERY method is for.
 
-> 🌐 **Live playground:** _<!--LIVE_URL-->deploying to Cloudflare Workers — see [Deploy](#deploy) below.<!--/LIVE_URL-->_
+> 🌐 **Live playground:** **<https://query-suite-example.danmat.workers.dev>**
 > Open DevTools → Network on that page to watch a real `QUERY` request fly.
 
 It exercises all four packages end-to-end:
