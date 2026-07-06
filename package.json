@@ -1,0 +1,27 @@
+{
+  "name": "query-suite-example",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A runnable example wiring together the @danmat HTTP QUERY (RFC 10008) suite: a stock-screener API and client using query-fetch, accept-query, query-cache, and query-server.",
+  "type": "module",
+  "scripts": {
+    "demo": "tsx src/demo.ts",
+    "start": "tsx src/start.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "Dan Matthew <dannymatthew@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@danmat/accept-query": "^0.1.0",
+    "@danmat/query-cache": "^0.1.0",
+    "@danmat/query-fetch": "^0.1.0",
+    "@danmat/query-server": "^0.1.0",
+    "@hono/node-server": "^1.13.0",
+    "hono": "^4.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.2"
+  }
+}
