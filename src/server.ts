@@ -1,7 +1,9 @@
 import {
   checkQueryRequest,
+  conditional,
   readQueryJson,
   withAcceptQuery,
+  withContentLocation,
 } from "@danmat/query-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
@@ -39,11 +41,16 @@ app.on(["QUERY", "POST"], "/stocks/search", async (c) => {
   const filter = await readQueryJson<StockFilter>(request);
   const results = searchStocks(filter);
 
-  // Advertise the accepted query formats on the way out.
-  return withAcceptQuery(
-    Response.json({ count: results.length, results }),
-    ACCEPTED,
+  // Advertise accepted formats, name the representation, and add ETag-based
+  // revalidation (safe: QUERY is idempotent and cacheable).
+  const response = withContentLocation(
+    withAcceptQuery(
+      Response.json({ count: results.length, results }),
+      ACCEPTED,
+    ),
+    request.url,
   );
+  return conditional(request, response);
 });
 
 /**

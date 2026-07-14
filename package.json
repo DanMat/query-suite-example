@@ -20,7 +20,7 @@
     "@danmat/accept-query": "^0.1.0",
     "@danmat/query-cache": "^0.1.0",
     "@danmat/query-fetch": "^0.1.0",
-    "@danmat/query-server": "^0.1.0",
+    "@danmat/query-server": "^0.2.0",
     "@hono/node-server": "^1.13.0",
     "hono": "^4.6.0"
   },
