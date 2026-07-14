@@ -78,6 +78,11 @@ export const PLAYGROUND_HTML = /* html */ `<!doctype html>
     <pre id="req" class="mono">—</pre>
     <label style="margin-top:.8rem">Response <span id="status"></span> · <span class="hint mono" id="aq"></span></label>
     <div id="out"><pre>Run a query to see results.</pre></div>
+    <div id="reval" style="display:none;margin-top:1rem;border-top:1px solid #1c2740;padding-top:.9rem">
+      <div class="hint">ETag <span class="mono" id="etag"></span></div>
+      <button id="revalidate">Revalidate (If-None-Match) ▸</button>
+      <span class="mono" id="reval-out" style="margin-left:.6rem"></span>
+    </div>
   </div>
 
   <p class="hint">Powered by
@@ -90,6 +95,8 @@ export const PLAYGROUND_HTML = /* html */ `<!doctype html>
 
 <script type="module">
   const $ = (id) => document.getElementById(id);
+  let lastEtag = null;
+  let lastFilter = null;
 
   async function run() {
     const filter = {};
@@ -115,6 +122,17 @@ export const PLAYGROUND_HTML = /* html */ `<!doctype html>
       const aq = res.headers.get("accept-query");
       if (aq) $("aq").textContent = "Accept-Query: " + aq;
 
+      // Capture the ETag so we can demonstrate revalidation → 304.
+      lastEtag = res.headers.get("etag");
+      lastFilter = filter;
+      if (lastEtag) {
+        $("etag").textContent = lastEtag;
+        $("reval-out").textContent = "";
+        $("reval").style.display = "block";
+      } else {
+        $("reval").style.display = "none";
+      }
+
       const data = await res.json();
       const rows = (data.results ?? []).map((s) =>
         \`<tr><td class="mono">\${s.symbol}</td><td>\${s.name}</td><td>\${s.sector}</td><td>$\${s.price}</td><td>$\${s.marketCapB}B</td></tr>\`
@@ -128,7 +146,27 @@ export const PLAYGROUND_HTML = /* html */ `<!doctype html>
     }
   }
 
+  async function revalidate() {
+    if (!lastEtag) return;
+    $("reval-out").textContent = "…";
+    try {
+      // Same query, now with If-None-Match — the server should answer 304.
+      const res = await fetch("/stocks/search", {
+        method: "QUERY",
+        headers: { "content-type": "application/json", "if-none-match": lastEtag },
+        body: JSON.stringify(lastFilter),
+      });
+      $("reval-out").textContent =
+        res.status === 304
+          ? "→ HTTP 304 Not Modified — representation unchanged ✓"
+          : "→ HTTP " + res.status + " (new representation)";
+    } catch (err) {
+      $("reval-out").textContent = "revalidation failed: " + (err?.message ?? err);
+    }
+  }
+
   $("run").addEventListener("click", run);
+  $("revalidate").addEventListener("click", revalidate);
   run();
 </script>
 </body>

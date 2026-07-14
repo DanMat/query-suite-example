@@ -22,7 +22,8 @@ app.use(
   cors({
     origin: "*",
     allowMethods: ["QUERY", "POST", "OPTIONS"],
-    allowHeaders: ["content-type", "x-http-method-override"],
+    allowHeaders: ["content-type", "x-http-method-override", "if-none-match"],
+    exposeHeaders: ["etag", "content-location", "accept-query"],
   }),
 );
 
