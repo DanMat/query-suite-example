@@ -77,6 +77,10 @@ curl http://localhost:8787/stocks/search \
 - [`@danmat/query-cache`](https://github.com/DanMat/query-cache) — body-aware response caching.
 - [`@danmat/query-server`](https://github.com/DanMat/query-server) — server-side request validation & negotiation.
 
+## Interoperability
+
+This deployment is a live target in [**rfc10008-interop**](https://github.com/A1darbek/rfc10008-interop) — an independent, co-maintained RFC 10008 conformance matrix that runs the same checks against this server and [Ayder](https://github.com/A1darbek/ayder), recording side-by-side receipts (Content-Type handling, `Accept-Query`, `ETag`/`If-None-Match` → `304`, `Content-Location`, and more).
+
 ## License
 
 [MIT](./LICENSE) © Dan Matthew
